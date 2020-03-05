@@ -1,7 +1,6 @@
 <template>
   <v-app
     id="alerta"
-    :dark="isDark"
   >
     <div v-if="!isKiosk">
       <v-navigation-drawer
@@ -12,11 +11,13 @@
         fixed
         app
       >
-        <v-toolbar
+        <v-app-bar
           :color="isDark ? '#616161' : '#eeeeee'"
           flat
         >
-          <v-toolbar-side-icon @click.stop="drawer = !drawer" />
+          <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+          />
 
           <router-link
             to="/"
@@ -34,7 +35,7 @@
               alerta
             </v-toolbar-title>
           </router-link>
-        </v-toolbar>
+        </v-app-bar>
 
         <v-divider />
         <v-list dense>
@@ -69,34 +70,34 @@
               :prepend-icon="item.model ? item.icon : item['icon-alt']"
               append-icon
             >
-              <v-list-tile slot="activator">
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.text }}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile
+              <v-list-item slot="activator">
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
                 v-for="(child, i) in item.children"
                 :key="i"
               >
-                <v-list-tile-action v-if="child.icon">
+                <v-list-item-action v-if="child.icon">
                   <v-icon>{{ child.icon }}</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ child.text }}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>{{ child.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
             </v-list-group>
-            <v-list-tile
+            <v-list-item
               v-else-if="item.icon && item.show"
               :key="item.text"
               v-has-perms="item.perms"
               :to="item.path"
             >
-              <v-list-tile-action>
+              <v-list-item-action>
                 <v-icon>{{ item.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
                   {{ item.text }}
                   <v-icon
                     v-if="item.appendIcon"
@@ -104,9 +105,9 @@
                   >
                     {{ item.appendIcon }}
                   </v-icon>
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
             <v-divider
               v-else-if="item.divider"
               :key="index"
@@ -121,7 +122,7 @@
         flat
         class="mb-1"
       >
-        <v-toolbar-side-icon
+        <v-app-bar-nav-icon
           @click.stop="drawer = !drawer"
         />
 
@@ -238,8 +239,8 @@
 
         <v-btn
           v-show="!isLoggedIn && isSignupEnabled"
-          round
-          outline
+          rounded
+          outlined
           color="primary"
           to="/signup"
         >
@@ -247,7 +248,7 @@
         </v-btn>
         <v-btn
           v-show="!isLoggedIn"
-          round
+          rounded
           color="primary"
           to="/login"
         >
@@ -255,7 +256,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-toolbar
+      <v-navigation-drawer
         v-if="selected.length > 0"
         :color="isDark ? '#8e8e8e' : '#bcbcbc'"
         class="mb-1"
@@ -354,7 +355,7 @@
         >
           <v-btn
             slot="activator"
-            flat
+            text
             icon
             small
             class="btn--plain px-1 mx-0"
@@ -369,13 +370,13 @@
           >
             <v-subheader>Actions</v-subheader>
             <v-divider />
-            <v-list-tile
+            <v-list-item
               v-for="(action, i) in actions"
               :key="i"
               @click="takeBulkAction(action)"
             >
-              <v-list-tile-title>{{ action | splitCaps }}</v-list-tile-title>
-            </v-list-tile>
+              <v-list-item-title>{{ action | splitCaps }}</v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-menu>
 
@@ -441,8 +442,8 @@
 
         <v-btn
           v-show="!isLoggedIn && isSignupEnabled"
-          round
-          outline
+          rounded
+          outlined
           color="primary"
           disabled
         >
@@ -450,19 +451,21 @@
         </v-btn>
         <v-btn
           v-show="!isLoggedIn"
-          round
+          rounded
           color="primary"
           disabled
         >
           {{ $t('LogIn') }}
         </v-btn>
-      </v-toolbar>
+      </v-navigation-drawer>
     </div>
 
     <v-content>
-      <banner />
-      <router-view />
-      <snackbar />
+      <v-container fluid>
+        <banner />
+        <router-view />
+        <snackbar />
+      </v-container>
     </v-content>
   </v-app>
 </template>

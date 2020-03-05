@@ -1,7 +1,6 @@
 <template>
   <v-snackbar
     v-model="show"
-    auto-height
     :color="snackbar.type"
     :timeout="snackbar.timeout"
   >
